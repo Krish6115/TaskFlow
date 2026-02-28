@@ -16,6 +16,7 @@ import {
     StatusBar,
     Modal,
     Alert,
+    Linking,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -204,7 +205,7 @@ const TaskListScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
                 showsHorizontalScrollIndicator={false}
                 data={PRIORITY_FILTERS}
                 keyExtractor={item => item}
-                style={styles.priorityFilterList}
+                contentContainerStyle={styles.priorityFilterList}
                 renderItem={({ item }) => {
                     const isActive = filterPriority === item;
                     return (
@@ -240,7 +241,7 @@ const TaskListScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
                 showsHorizontalScrollIndicator={false}
                 data={CATEGORIES}
                 keyExtractor={item => item}
-                style={styles.categoryFilterList}
+                contentContainerStyle={styles.categoryFilterList}
                 renderItem={({ item }) => {
                     const isActive = filterCategory === item;
                     return (
@@ -283,6 +284,23 @@ const TaskListScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         </View>
     );
 
+    const renderFooter = () => (
+        <View style={styles.footerContainer}>
+            <Text style={styles.footerText}>
+                Built with ❤️ by{' '}
+                <Text
+                    style={styles.footerLink}
+                    onPress={() =>
+                        Linking.openURL(
+                            'https://www.linkedin.com/in/siva-rama-krishna-reddy-padala/',
+                        )
+                    }>
+                    SRKREDDY
+                </Text>
+            </Text>
+        </View>
+    );
+
     return (
         <LinearGradient
             colors={[Colors.gradientStart, Colors.gradientMiddle, Colors.gradientEnd]}
@@ -314,6 +332,7 @@ const TaskListScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
                     />
                 )}
                 ListHeaderComponent={renderHeader}
+                ListFooterComponent={renderFooter}
                 ListEmptyComponent={loading ? null : renderEmptyState}
                 contentContainerStyle={styles.listContent}
                 showsVerticalScrollIndicator={false}
@@ -621,6 +640,21 @@ const styles = StyleSheet.create({
     sortOptionTextActive: {
         color: Colors.primary,
         fontWeight: Typography.fontWeight.bold,
+    },
+    footerContainer: {
+        paddingVertical: Spacing.xl,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    footerText: {
+        color: Colors.textMuted,
+        fontSize: Typography.fontSize.sm,
+        fontWeight: Typography.fontWeight.medium,
+    },
+    footerLink: {
+        color: Colors.primary,
+        fontWeight: Typography.fontWeight.bold,
+        textDecorationLine: 'underline',
     },
 });
 

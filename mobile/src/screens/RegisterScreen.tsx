@@ -26,11 +26,13 @@ import { useAuth } from '../context/AuthContext';
 
 const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     const { register } = useAuth();
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{
+        name?: string;
         email?: string;
         password?: string;
         confirmPassword?: string;
@@ -49,10 +51,17 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
     const validate = (): boolean => {
         const newErrors: {
+            name?: string;
             email?: string;
             password?: string;
             confirmPassword?: string;
         } = {};
+
+        if (!name.trim()) {
+            newErrors.name = 'Name is required';
+        } else if (name.trim().length < 2) {
+            newErrors.name = 'Name must be at least 2 characters';
+        }
 
         if (!email.trim()) {
             newErrors.email = 'Email is required';
@@ -81,7 +90,7 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
         setLoading(true);
         try {
-            await register(email.trim().toLowerCase(), password);
+            await register(name.trim(), email.trim().toLowerCase(), password);
         } catch (error: any) {
             const message =
                 error.response?.data?.message ||
@@ -149,6 +158,21 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
                                 opacity: formAnim,
                             },
                         ]}>
+                        <InputField
+                            label="Full Name"
+                            icon="account-outline"
+                            placeholder="Enter your full name"
+                            value={name}
+                            onChangeText={text => {
+                                setName(text);
+                                if (errors.name) {
+                                    setErrors(prev => ({ ...prev, name: undefined }));
+                                }
+                            }}
+                            error={errors.name}
+                            autoCapitalize="words"
+                        />
+
                         <InputField
                             label="Email"
                             icon="email-outline"

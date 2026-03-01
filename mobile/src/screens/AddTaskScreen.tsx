@@ -26,6 +26,7 @@ import { Priority } from '../types';
 import { createTask } from '../api/tasks';
 import Button from '../components/Button';
 import InputField from '../components/InputField';
+import { scheduleTaskReminder } from '../services/notificationService';
 
 const PRIORITIES: Priority[] = ['low', 'medium', 'high', 'urgent'];
 const PRIORITY_LABELS: Record<Priority, string> = {
@@ -88,13 +89,17 @@ const AddTaskScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
         setLoading(true);
         try {
-            await createTask({
+            const response = await createTask({
                 title: title.trim(),
                 description: description.trim(),
                 deadline: deadline.toISOString(),
                 priority,
                 category,
             });
+            // Schedule recurring reminder notification for the new task
+            if (response.task) {
+                scheduleTaskReminder(response.task);
+            }
             navigation.goBack();
         } catch (error: any) {
             const message =

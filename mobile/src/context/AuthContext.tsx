@@ -22,7 +22,7 @@ interface AuthContextType {
     isLoading: boolean;
     isAuthenticated: boolean;
     login: (email: string, password: string) => Promise<void>;
-    register: (email: string, password: string) => Promise<void>;
+    register: (name: string, email: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
 }
 
@@ -62,8 +62,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         await AsyncStorage.setItem('user', JSON.stringify(response.user));
     }, []);
 
-    const register = useCallback(async (email: string, password: string) => {
-        const response = await registerUser(email, password);
+    const register = useCallback(async (name: string, email: string, password: string) => {
+        const response = await registerUser(name, email, password);
         setToken(response.token);
         setUser(response.user);
         await AsyncStorage.setItem('token', response.token);

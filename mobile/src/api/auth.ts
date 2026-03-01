@@ -17,10 +17,12 @@ export const loginUser = async (
 };
 
 export const registerUser = async (
+    name: string,
     email: string,
     password: string,
 ): Promise<RegisterResponse> => {
     const response = await apiClient.post<RegisterResponse>('/auth/register', {
+        name,
         email,
         password,
     });

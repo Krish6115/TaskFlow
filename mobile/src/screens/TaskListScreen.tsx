@@ -25,6 +25,11 @@ import { Task, TaskQueryParams, Priority } from '../types';
 import { getTasks, updateTask, deleteTask } from '../api/tasks';
 import { useAuth } from '../context/AuthContext';
 import TaskCard from '../components/TaskCard';
+import {
+    syncAllReminders,
+    cancelTaskReminder,
+    scheduleTaskReminder,
+} from '../services/notificationService';
 
 const SORT_OPTIONS = [
     { label: 'Smart Sort', value: 'mixed', icon: 'auto-fix' },
@@ -77,6 +82,8 @@ const TaskListScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
             }
             const response = await getTasks(params);
             setTasks(response.tasks);
+            // Sync notification reminders with current task list
+            syncAllReminders(response.tasks);
         } catch (error: any) {
             console.error('Failed to fetch tasks:', error);
             Alert.alert('Error', 'Failed to load tasks. Please try again.');
@@ -112,6 +119,15 @@ const TaskListScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
                 ),
             );
             await updateTask(task._id, { completed: !task.completed });
+
+            // Manage notification reminders
+            if (!task.completed) {
+                // Marking as complete → cancel reminders
+                cancelTaskReminder(task._id);
+            } else {
+                // Marking as incomplete → re-schedule reminders
+                scheduleTaskReminder({ ...task, completed: false });
+            }
         } catch (error: any) {
             // Revert on error
             setTasks(prev =>
@@ -125,6 +141,8 @@ const TaskListScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
     const handleDelete = async (taskId: string) => {
         try {
+            // Cancel notification reminder before deleting
+            cancelTaskReminder(taskId);
             setTasks(prev => prev.filter(t => t._id !== taskId));
             await deleteTask(taskId);
         } catch (error: any) {
@@ -310,9 +328,9 @@ const TaskListScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
             {/* Header */}
             <View style={styles.header}>
                 <View style={styles.headerLeft}>
-                    <Text style={styles.greeting}>Hello! 👋</Text>
+                    <Text style={styles.greeting}>Welcome Back,</Text>
                     <Text style={styles.email} numberOfLines={1}>
-                        {user?.email}
+                        {user?.name}
                     </Text>
                 </View>
                 <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>

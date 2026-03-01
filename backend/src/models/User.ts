@@ -9,6 +9,7 @@ import bcrypt from 'bcryptjs';
 
 // Interface for User document
 export interface IUser extends Document {
+    name: string;
     email: string;
     password: string;
     createdAt: Date;
@@ -17,6 +18,12 @@ export interface IUser extends Document {
 
 // User schema definition
 const UserSchema: Schema<IUser> = new Schema({
+    name: {
+        type: String,
+        required: [true, 'Name is required'],
+        trim: true,
+        maxlength: [50, 'Name cannot exceed 50 characters'],
+    },
     email: {
         type: String,
         required: [true, 'Email is required'],

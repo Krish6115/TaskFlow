@@ -18,11 +18,11 @@ const router = Router();
  */
 router.post('/register', async (req: Request, res: Response): Promise<void> => {
     try {
-        const { email, password } = req.body;
+        const { name, email, password } = req.body;
 
         // Validate input
-        if (!email || !password) {
-            res.status(400).json({ message: 'Email and password are required.' });
+        if (!name || !email || !password) {
+            res.status(400).json({ message: 'Name, email and password are required.' });
             return;
         }
 
@@ -39,7 +39,7 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
         }
 
         // Create new user (password is hashed by pre-save middleware)
-        const user = new User({ email, password });
+        const user = new User({ name, email, password });
         await user.save();
 
         // Generate JWT token
@@ -52,7 +52,7 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
         res.status(201).json({
             message: 'Account created successfully!',
             token,
-            user: { id: user._id, email: user.email },
+            user: { id: user._id, name: user.name, email: user.email },
         });
     } catch (error: any) {
         console.error('Registration error:', error);
@@ -99,7 +99,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
         res.status(200).json({
             message: 'Login successful!',
             token,
-            user: { id: user._id, email: user.email },
+            user: { id: user._id, name: user.name, email: user.email },
         });
     } catch (error: any) {
         console.error('Login error:', error);

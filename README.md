@@ -6,14 +6,14 @@
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License" />
 </p>
 
-<h1 align="center">📋 TaskFlow — Smart To-Do App</h1>
+<h1 align="center">📋 TaskFlow</h1>
 
 <p align="center">
-  <strong>A feature-rich, cloud-synced task management app built with React Native & Express.js</strong>
+  <strong>A cross-platform task management app built with React Native & Express.js</strong>
 </p>
 
 <p align="center">
-  <em>Organize your life with smart sorting, priority-based reminders, and a stunning dark UI.</em>
+  <em>Stay productive with smart sorting, priority-based reminders, and a stunning dark UI.</em>
 </p>
 
 <p align="center">
@@ -32,7 +32,7 @@
 
 ### 📱 Mobile App
 - **User Authentication** — Secure registration & login with JWT-based sessions
-- **Task CRUD** — Create, read, update, and delete tasks with real-time sync
+- **Full Task Management** — Create, read, update, and delete tasks with real-time cloud sync
 - **Smart Sort Algorithm** — Weighted composite scoring using priority, deadline urgency, and recency
 - **Advanced Filtering** — Filter by priority (🔴 Urgent / 🟠 High / 🟡 Medium / 🟢 Low), category, and completion status
 - **Task Categories** — Organize tasks into General, Work, Personal, Health, Shopping, and Study
@@ -158,8 +158,8 @@ TaskFlow/
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/Krish6115/To-Do-App.git
-cd To-Do-App
+git clone https://github.com/Krish6115/TaskFlow.git
+cd TaskFlow
 ```
 
 ### 2️⃣ Backend Setup
@@ -173,7 +173,7 @@ Create a `.env` file in the `backend/` directory:
 
 ```env
 PORT=5000
-MONGO_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/todo_app
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/taskflow
 JWT_SECRET=your_super_secret_jwt_key
 ```
 
